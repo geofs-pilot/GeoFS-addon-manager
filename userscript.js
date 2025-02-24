@@ -88,7 +88,7 @@
             description.innerText = descriptionText;
             description.style.display = 'none';
             description.style.lineHeight = '1.1';
-            description.style.paddingRight = '60px';
+            description.style.paddingRight = '80px';
 
             
             addonItem.onclick = (event) => {
