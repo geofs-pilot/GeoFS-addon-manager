@@ -52,11 +52,11 @@
                   'Autoland': `Automatic spoiler arming system
                   Auto-disables autopilot on touchdown
                   Automatic reverse thrust activation on landing
-                  Visual indicator for spoiler arm status (press Shift to arm)`,
+                  Visual indicator for spoiler arm status (press [Shift] to arm)`,
           		
                   'Chat frequencies': `Allows you to chat on the same frequencies as others using this addon`,
 
-                  'Flight path vector': `Shows approximately where your flight path intersects the ground. It also displays your glideslope if you are tuned into ILS. The addon only activates if your landing gear is down`,
+                  'Flight path vector': `Shows approximately where your flight path intersects the ground. It also displays your glideslope if you are tuned into ILS. The addon only activates if your landing gear is down. Hide the FPV by pressing [Insert]`,
 
                   'Failures': `Adds the ability for systems to fail`,
 
@@ -82,7 +82,7 @@
                   other custom liveries made exactly for this project.`,
 
                   'Overpowered engines': `Sets the engine thrust to 900,000 and the ceiling to 300,000 feet.
-                  Toggle using Q`,
+                  Toggle using [Q]`,
 
                   'Pushback': `Adds pushback tugs for most military and civilian aircraft which appear if you are stationary.`,
 
@@ -107,7 +107,7 @@
                     Morane-Saulnier Type G
                     F-117: No working stealth
                     F-14A Tomcat: More realistic physics than F-14B
-                    Paddle switch/Cobra button: " (apostrophe/quotation mark)
+                    Paddle switch/Cobra button: ["] (apostrophe/quotation mark)
                     Clickable cockpits:
                     Piper Cub: Mixture (toggles engine)
                     Cessna 172: Throttle, mixture (toggles engine)
@@ -120,7 +120,7 @@
                     Minor F-16 sound tweak (directional)
                     Sonic booms & high-G sounds
                     Carrier catapults (*)
-                    Taxi to USS John C. Stennis front deck, press "q" to lock/unlock launch bar, "~" to launch (full power recommended)
+                    Taxi to USS John C. Stennis front deck, press [Q] to lock/unlock launch bar, [~] to launch (full power recommended)
                     Stall buffet camera effect (*)
                     Lift-based wingflex for most CC airliners (*)
                     Realism fixes: HAL Tejas, F-15, F-22
@@ -129,11 +129,23 @@
                     Turbofan spool-up delay (10%-70% RPM)
                     Advanced 2D Clouds Gen V1
                     Autospoilers (Shift to arm)
-                    Fighter jet ejection seats (E to eject, B to descend faster)
+                    Fighter jet ejection seats ([E] to eject, [B] to descend faster)
                     HUD machmeter
                     Lag reduction`,
 
-                    'Streetlights': `Creates 3d streelights`,
+		    'Slew mode': `Mimics slew mode from FSX
+      		    Fwd: [I]
+		    Back: [K]
+		    Left: [J]
+		    Right: [L]
+		    Up:[U]
+		    Down: [Enter]
+		    Yaw right: [.]
+		    Yaw left: [,]
+		    Roll right: [->]
+		    Roll left: [<-]`,
+
+                    'Streetlights': `Creates 3d streetlights`,
 
                     'Taxiway lights': `Creates taxiway lights that turn yellow when nearing a runway to help distinguish intersections`,
 
@@ -208,10 +220,12 @@
           addAddon('Overpowered engines', opengines);
           addAddon('Pushback', pushback);
           addAddon('Realism pack', realism);
-          addAddon('Streetlights', slights);
-          addAddon('Taxiway lights', twlights);
+          addAddon('Slew mode', slew);
+	  addAddon('Streetlights', slights);
+	  addAddon('Taxiway lights', twlights);
           addAddon('Tiller fix for autolanding', tiller);
-  
+         
+
           geofsPreferencesPanel.appendChild(addonListItem);
       }
   
@@ -3352,6 +3366,14 @@ f14aInterval = setInterval(function(){runF14A()},10)
     (._;>;);
     out body;
     `,n=`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(r)}`;try{let l=await fetch(n);if(!l.ok)throw Error(`Error fetching data: ${l.statusText}`);let d=await l.json(),g=i(d);console.log("Road coordinates:",g),s(g,a)}catch(c){console.error("Error:",c)}}else if("removeCloseStreetLights"==e.data.type){var u=o(e.data.data);self.postMessage({type:"removeCloseStreetLights",data:u})}})};async function removeStreetLights(e){for(var t in console.log("removing Streetlights"),e)window.geofs.api.viewer.entities.remove(window.roads[e[t]])}function calculateDistance(e,t){let[s,a]=e,[o,i]=t,r=6371e3,n=(o-s)*(Math.PI/180),l=(i-a)*(Math.PI/180),d=Math.sin(n/2)**2+Math.cos(s*Math.PI/180)*Math.cos(o*Math.PI/180)*Math.sin(l/2)**2,g=2*Math.atan2(Math.sqrt(d),Math.sqrt(1-d));return r*g}async function instanceStLts(){let e=window.slPos.map((e,t)=>{let s=window.Cesium.Matrix4.fromTranslation(e),a=window.Cesium.Matrix3.fromQuaternion(window.slOri[t]);return window.Cesium.Matrix4.multiplyByMatrix3(s,a,new window.Cesium.Matrix4)});console.log(e),window.roads.push(window.geofs.api.viewer.scene.primitives.add(new window.Cesium.ModelInstanceCollection({url:"https://raw.githubusercontent.com/tylerbmusic/GPWS-files_geofs/refs/heads/main/streetlight_coned.glb",instances:e.map(e=>({modelMatrix:e}))})))}async function addStreetlight(e,t){window.ltTO+=1,setTimeout(()=>{let s=[e[1],e[0],window.geofs.api.viewer.scene.globe.getHeight(window.Cesium.Cartographic.fromDegrees(e[1],e[0]))],a=window.Cesium.Cartesian3.fromDegrees(s[0],s[1],s[2]),o=new window.Cesium.HeadingPitchRoll(t,0,0),i=window.Cesium.Transforms.headingPitchRollQuaternion(a,o);window.rPos.push([e,window.roads.length]),window.roads.push(window.geofs.api.viewer.entities.add({name:"streetlight",position:a,orientation:i,model:{uri:"https://raw.githubusercontent.com/tylerbmusic/GPWS-files_geofs/refs/heads/main/streetlight_coned.glb",minimumPixelSize:64,maximumScale:1},translucencyByDistance:new window.Cesium.NearFarScalar(100,1,500,0)}))},window.ltTO)}!async function(){"use strict";function afterGMenu(){let e=new window.GMenu("Streetlights","stLt");e.addItem("Render Distance (degrees): ","RenderDist","number",0,"0.003"),e.addItem("Update Interval (seconds): ","UpdateInterval","number",0,"5"),e.addItem("Distance between Streetlights (meters): ","Dist","number",0,"60"),setInterval(()=>{window.doRoads(),setTimeout(()=>{window.streetLightLOD()},3500)},1e3*Number(localStorage.getItem("stLtUpdateInterval")))}window.roads=[],window.rPos=[],window.fPos=[],window.slPos=[],window.slOri=[],window.allSPos=[],window.rdslastBounds,window.slLOD=!1,window.ltTO=0,window.streetLightWorker=new Worker(URL.createObjectURL(new Blob([`(${workerScript})()`],{type:"application/javascript"}))),window.streetLightWorker.addEventListener("message",function(e){if("addStreetlight"==e.data.type){let t=e.data.data[0],s=e.data.data[1],a=[t[1],t[0],window.geofs.api.viewer.scene.globe.getHeight(window.Cesium.Cartographic.fromDegrees(t[1],t[0]))],o=window.Cesium.Cartesian3.fromDegrees(a[0],a[1],a[2]);window.slPos.push(o);let i=new window.Cesium.HeadingPitchRoll(s,0,0),r=window.Cesium.Transforms.headingPitchRollQuaternion(o,i);window.slOri.push(r)}else"removeCloseStreetLights"==e.data.type?(console.log("Chat, I'm cooked"),removeStreetLights(e.data.data)):"streetLightsFinished"==e.data.type&&(console.log("streetLightsFinished"),instanceStLts())}),window.gmenu&&window.GMenu||(console.log("Streetlights getting GMenu"),fetch("https://raw.githubusercontent.com/tylerbmusic/GeoFS-Addon-Menu/refs/heads/main/addonMenu.js").then(e=>e.text()).then(script=>{eval(script)}).then(()=>{setTimeout(afterGMenu,100)}))}(),window.streetLightLOD=async function(){var e,t=void 0!==window.geofs.animation.values.altitude&&void 0!==window.geofs.animation.values.groundElevationFeet?window.geofs.animation.values.altitude-window.geofs.animation.values.groundElevationFeet+3.2808399*window.geofs.aircraft.instance.collisionPoints[window.geofs.aircraft.instance.collisionPoints.length-2].worldPosition[2]:"N/A";if((t>3e3||window.weather.timeRatio<.5)&&!window.slLOD)for(e=0,window.slLOD=!0;e<window.roads.length;e++)window.roads[e].model.uri="https://raw.githubusercontent.com/tylerbmusic/GPWS-files_geofs/refs/heads/main/streetlight_lod.glb";else if(t<=3e3&&window.weather.timeRatio>=.5&&window.slLOD)for(e=0,window.slLOD=!1;e<window.roads.length;e++)window.roads[e].model.uri="https://raw.githubusercontent.com/tylerbmusic/GPWS-files_geofs/refs/heads/main/streetlight_coned.glb"},window.doRoads=async function(){window.ltTO=0;var e=void 0!==window.geofs.animation.values.altitude&&void 0!==window.geofs.animation.values.groundElevationFeet?window.geofs.animation.values.altitude-window.geofs.animation.values.groundElevationFeet+3.2808399*window.geofs.aircraft.instance.collisionPoints[window.geofs.aircraft.instance.collisionPoints.length-2].worldPosition[2]:"N/A";if(!1==window.geofs.cautiousWithTerrain&&"true"==localStorage.getItem("stLtEnabled")&&e<3e3){var t=Number(localStorage.getItem("stLtRenderDist")),s=Math.floor(window.geofs.aircraft.instance.llaLocation[0]/t)*t,a=Math.floor(window.geofs.aircraft.instance.llaLocation[1]/t)*t;if(window.bounds=s+", "+a+", "+(s+t)+", "+(a+t),!window.rdslastBounds||window.rdslastBounds!=window.bounds){for(let o=0;o<window.roads.length;o++)window.geofs.api.viewer.scene.primitives.remove(window.roads[o]);window.roads=[],window.slPos=[],window.slOri=[],console.log("Roads removed, placing new ones"),console.log("bounds: "+window.bounds),window.streetLightWorker.postMessage({type:"fetchRoadData",data:[window.bounds,localStorage.getItem("stLtDist")]})}window.rdslastBounds=window.bounds}else if(!1==window.geofs.cautiousWithTerrain&&"false"==window.stLtOn){window.rdslastBounds="";for(let i=0;i<window.roads.length;i++)window.geofs.api.viewer.scene.primitives.remove(window.roads[i]);window.roads=[],window.slPos=[],window.slOri=[]}},window.removeCloseStreetlights=async function(){let e=5,t=new Map,s=new Set,a=([t,s])=>`${Math.floor(t/e)},${Math.floor(s/e)}`;for(let o=0;o<window.rPos.length;o++){let i=window.rPos[o][0],r=a(i);t.has(r)||t.set(r,[]),t.get(r).push(o)}for(let[n,l]of t){let[d,g]=n.split(",").map(Number);for(let c=-1;c<=1;c++)for(let u=-1;u<=1;u++){let f=`${d+c},${g+u}`,$=t.get(f)||[];for(let h=0;h<l.length;h++){let m=l[h],_=window.rPos[m][0];for(let p=0;p<$.length;p++){let v=$[p];if(m>=v)continue;let P=window.rPos[v][0],w=calculateDistance(_,P);w<=5&&s.add(v)}}}}let b=Array.from(s).sort((e,t)=>t-e);for(let y of b)window.geofs.api.viewer.entities.remove(window.roads[y]);for(let L of b)window.rPos.splice(L,1),window.roads.splice(L,1);console.log(`${b.length} streetlights removed.`)};
+          })();
+      };
+      window.slew = function() {
+          (function() {
+              //PASTE IN CODE BELOW
+              !function(){"use strict";function afterGMenu(){let e=new window.GMenu("Slew Mode","slew");e.addItem("Horizontal Speed (in degrees/frame): ","LatSpeed","number",0,"0.0001"),e.addItem("Vertical Speed (in feet/frame): ","VertSpeed","number",0,"2"),e.addItem("Rotate Amount (in degrees): ","RotAmount","number",0,"2"),e.addItem("Speed after slew disabled (higher values are lower speeds, no flaps): ","SpeedMultiplier","number",0,"1.96"),e.addItem("Speed after slew disabled (with flaps): ","SpeedMultiplierFlaps","number",0,"2.7"),e.addHeader(2,"Keybinds"),e.addKBShortcut("Toggle Slew Mode: ","Toggle",1,"y",function(){kb("Toggle")}),e.addKBShortcut("Forwards: ","Forward",1,"i",function(){kb("Forward")}),e.addKBShortcut("Backwards: ","Backwards",1,"k",function(){kb("Backwards")}),e.addKBShortcut("Left: ","Left",1,"j",function(){kb("Left")}),e.addKBShortcut("Right: ","Right",1,"l",function(){kb("Right")}),e.addKBShortcut("Up: ","Up",1,"u",function(){kb("Up")}),e.addKBShortcut("Down: ","Down",1,"Enter",function(){kb("Down")}),e.addHeader(3,"Rotation"),e.addKBShortcut("Tilt Up: ","RotTiltUp",2,"ArrowUp",function(){kb("TiltUp")}),e.addKBShortcut("Tilt Down: ","RotTiltDown",2,"ArrowDown",function(){kb("TiltDown")}),e.addKBShortcut("Roll Left: ","RotRLeft",2,"ArrowLeft",function(){kb("RLeft")}),e.addKBShortcut("Roll Right: ","RotRRight",2,"ArrowRight",function(){kb("RRight")}),e.addKBShortcut("Yaw Left: ","RotRYLeft",2,",",function(){kb("YLeft")}),e.addKBShortcut("Yaw Right: ","RotYRight",2,".",function(){kb("YRight")})}window.gmenu&&window.GMenu||fetch("https://raw.githubusercontent.com/tylerbmusic/GeoFS-Addon-Menu/refs/heads/main/addonMenu.js").then(e=>e.text()).then(script=>{eval(script)}).then(()=>{setTimeout(afterGMenu,100)});var isSlewing=!1,tilt=0,roll=0,speedF=0,sideways=0,speedV=0,slewA=0,slewB=0,slewAlt=0,headingRad=0;window.lastCam=0,window.lastGravity=[0,0,0],window.slewDiv=document.createElement("div"),window.slewDiv.style.width="fit-content",window.slewDiv.style.height="fit-content",window.slewDiv.style.color="red",window.slewDiv.style.position="fixed",window.slewDiv.style.margin="5px",document.body.appendChild(window.slewDiv);let lastFrameNumber=window.geofs.frameNumber;function checkFrameNumber(){isSlewing&&(window.geofs.frameNumber!==lastFrameNumber&&(lastFrameNumber=window.geofs.frameNumber,updateSlew()),requestAnimationFrame(checkFrameNumber))}function kb(e){localStorage.getItem("slewToggle"),localStorage.getItem("slewForward"),localStorage.getItem("slewLeft"),localStorage.getItem("slewBackwards"),localStorage.getItem("slewRight"),localStorage.getItem("slewUp"),localStorage.getItem("slewRotYRight"),localStorage.getItem("slewRotYLeft"),localStorage.getItem("slewRotTiltUp"),localStorage.getItem("slewRotTiltDown"),localStorage.getItem("slewRotRLeft"),localStorage.getItem("slewRotRRight"),localStorage.getItem("slewDown");let t=document.activeElement===document.getElementById("chatInput");if(!t&&"true"==localStorage.getItem("slewEnabled")){if("Toggle"==e){if(isSlewing=!isSlewing)window.slew();else if(window.geofs.camera.set(window.lastCam),speedF=0,sideways=0,speedV=0,tilt=0,roll=0,window.geofs.aircraft.instance.rigidBody.gravityForce=window.lastGravity,window.slewDiv.innerHTML="",!window.geofs.animation.values.groundContact){var o,i=window.geofs.aircraft.instance;o=0==window.geofs.animation.values.flapsTarget?i.definition.minimumSpeed/Number(localStorage.getItem("slewSpeedMultiplier"))*i.definition.mass:i.definition.minimumSpeed/Number(localStorage.getItem("slewSpeedMultiplierFlaps"))*i.definition.mass,i.rigidBody.applyCentralImpulse(window.V3.scale(i.object3d.getWorldFrame()[1],o))}}else"Forward"==e?speedF+=Number(localStorage.getItem("slewLatSpeed")):"Backwards"==e?speedF-=Number(localStorage.getItem("slewLatSpeed")):"Right"==e?sideways+=Number(localStorage.getItem("slewLatSpeed")):"Left"==e?sideways-=Number(localStorage.getItem("slewLatSpeed")):"Up"==e?speedV+=Number(localStorage.getItem("slewVertSpeed")):"Down"==e?speedV-=Number(localStorage.getItem("slewVertSpeed")):"YRight"==e?headingRad+=Number(localStorage.getItem("slewRotAmount"))*window.DEGREES_TO_RAD:"YLeft"==e?headingRad-=Number(localStorage.getItem("slewRotAmount"))*window.DEGREES_TO_RAD:"TiltUp"==e?tilt+=Number(localStorage.getItem("slewRotAmount"))*window.DEGREES_TO_RAD:"TiltDown"==e?tilt-=Number(localStorage.getItem("slewRotAmount"))*window.DEGREES_TO_RAD:"RLeft"==e?roll+=Number(localStorage.getItem("slewRotAmount"))*window.DEGREES_TO_RAD:"RRight"==e&&(roll-=Number(localStorage.getItem("slewRotAmount"))*window.DEGREES_TO_RAD)}}async function updateSlew(){headingRad%=360*window.DEGREES_TO_RAD,window.controls.setMode(window.pControl);var e=Math.cos(headingRad)*speedF-Math.sin(headingRad)*sideways,t=Math.sin(headingRad)*speedF+Math.cos(headingRad)*sideways;slewA+=e,slewB+=t,slewAlt=window.geofs.animation.values.groundContact&&speedV<0?slewAlt:slewAlt+speedV,window.geofs.aircraft.instance.llaLocation=[slewA,slewB,slewAlt],window.geofs.aircraft.instance.object3d.setInitialRotation([tilt,roll,headingRad]),window.geofs.aircraft.instance.rigidBody.v_linearVelocity=[0,0,0],window.geofs.aircraft.instance.rigidBody.v_acceleration=[0,0,0],window.geofs.aircraft.instance.rigidBody.v_angularVelocity=[0,0,0],window.geofs.aircraft.instance.rigidBody.v_angularAcceleration=[0,0,0],window.geofs.aircraft.instance.rigidBody.gravityForce=[0,0,0],window.slewDiv.innerHTML=`
+        <p style="margin: 0px; font-weight: bold;">LAT: ${slewA.toFixed(4)} LON: ${slewB.toFixed(4)} ALT: ${(slewAlt*window.METERS_TO_FEET).toFixed(1)} FT MSL MAG ${(headingRad*window.RAD_TO_DEGREES).toFixed(0)} ${((Math.abs(speedF)+Math.abs(sideways))/Number(localStorage.getItem("slewLatSpeed"))).toFixed(0)} UNITS</p>
+        `}window.slew=async function(){speedF=0,sideways=0,speedV=0,tilt=0,roll=0,window.lastGravity=window.geofs.aircraft.instance.rigidBody.gravityForce,window.lastCam=window.geofs.camera.currentMode,headingRad=window.geofs.animation.values.heading360*window.DEGREES_TO_RAD,window.pControl=window.geofs.preferences.controlMode,slewA=window.geofs.aircraft.instance.llaLocation[0],slewB=window.geofs.aircraft.instance.llaLocation[1],slewAlt=window.geofs.aircraft.instance.llaLocation[2],window.geofs.camera.set(5),requestAnimationFrame(checkFrameNumber)}}();
           })();
       };
       window.twlights = function() {
