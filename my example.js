@@ -56,7 +56,7 @@
           		
                   'Chat frequencies': `Allows you to chat on the same frequencies as others using this addon`,
 
-                  'Flight path vector': `Shows approximately where your flight path intersects the ground. It also displays your glideslope if you are tuned into ILS. The addon only activates if your landing gear is down. Hide the FPV by pressing [Insert]`,
+                  'Flight path vector': `Shows approximately where your flight path intersects the ground. It also displays your glideslope if you are tuned into ILS. Hide the FPV by pressing [Insert]`,
 
                   'Failures': `Adds the ability for systems to fail`,
 
