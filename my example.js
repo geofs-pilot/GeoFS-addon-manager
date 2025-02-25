@@ -53,8 +53,6 @@
                   Auto-disables autopilot on touchdown
                   Automatic reverse thrust activation on landing
                   Visual indicator for spoiler arm status (press [Shift] to arm)`,
-          		
-                  'Chat frequencies': `Allows you to chat on the same frequencies as others using this addon`,
 
                   'Flight path vector': `Shows approximately where your flight path intersects the ground. It also displays your glideslope if you are tuned into ILS. Hide the FPV by pressing [Insert]`,
 
@@ -209,7 +207,6 @@
           //ADDON NAMES AND runFunctions GO HERE:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
           addAddon('ATC airspace', airspace);
           addAddon('Autoland++', autoland);
-          addAddon('Chat frequencies', freq);
           addAddon('Flight path vector', fpv);
           addAddon('Failures', failures);
           addAddon('Fuel', fuel);
@@ -398,112 +395,6 @@
           (function() {
               //PASTE IN CODE BELOW
               async function waitForCondition(i){return new Promise(t=>{let n=setInterval(()=>{i()&&(clearInterval(n),t())},100)})}async function waitForUI(){return waitForCondition(()=>"undefined"!=typeof ui)}async function waitForInstance(){return waitForCondition(()=>geofs.aircraft&&geofs.aircraft.instance)}async function waitForInstruments(){return waitForCondition(()=>instruments&&geofs.aircraft.instance.setup.instruments)}async function autospoilers(){await waitForUI(),await waitForInstance(),ui.notification.show("Note: spoiler arming key has now changed to Shift."),geofs.aircraft.instance.animationValue.spoilerArming=0;let i=()=>{geofs.aircraft.instance.groundContact||0!==controls.airbrakes.position||(geofs.aircraft.instance.animationValue.spoilerArming=0===geofs.aircraft.instance.animationValue.spoilerArming?1:0)},t=()=>{controls.airbrakes.target=0===controls.airbrakes.target?1:0,controls.setPartAnimationDelta(controls.airbrakes),geofs.aircraft.instance.animationValue.spoilerArming=0};controls.setters.setSpoilerArming={label:"Spoiler Arming",set:i},controls.setters.setAirbrakes={label:"Air Brakes",set:t},await waitForInstruments(),instruments.definitions.spoilers.overlay.overlays[3]={anchor:{x:0,y:0},size:{x:50,y:50},position:{x:0,y:0},animations:[{type:"show",value:"spoilerArming",when:[1]},{type:"hide",value:"spoilerArming",when:[0]}],class:"control-pad-dyn-label green-pad",text:"SPLR<br/>ARM",drawOrder:1},instruments.init(geofs.aircraft.instance.setup.instruments),$(document).keydown(function(i){16===i.which&&(console.log("Toggled Arming Spoilers"),controls.setters.setSpoilerArming.set())}),setInterval(function(){1===geofs.aircraft.instance.animationValue.spoilerArming&&geofs.aircraft.instance.groundContact&&(0===controls.airbrakes.position&&controls.setters.setAirbrakes.set(),geofs.aircraft.instance.animationValue.spoilerArming=0,geofs.autopilot.setSpeed(0),setTimeout(()=>{geofs.autopilot.turnOff()},200),controls.setters.fullReverse.set())},100),setInterval(function(){["3292","3054"].includes(geofs.aircraft.instance.id)&&void 0===geofs.aircraft.instance.setup.instruments.spoilers&&(geofs.aircraft.instance.setup.instruments.spoilers="",instruments.init(geofs.aircraft.instance.setup.instruments))},500)}autospoilers();
-          })();
-      };
-      window.freq = function() {
-          (function() {
-              //PASTE IN CODE BELOW
-              // @license MIT
-const sleep=e=>new Promise(t=>setTimeout(t,e));if("/pages/map.php"===window.location.pathname){function e(e){var t=document.createElement("div");return t.innerHTML=e.trim(),t.firstChild}async function t(){var t=Date.now();multiplayer.lastRequestTime=t;var a={acid:geofs.userRecord.id,sid:geofs.userRecord.sessionId,id:multiplayer.myId,ac:1,co:[33.936952715460784,-118.38498159830658,45.20037842951751,141.2313037411972,-15,0],ve:[0,-.000000000000000014210854715202004,9835858350015769e-26,0,0,0],st:{gr:!0,as:0},ti:multiplayer.getServerTime(),m:multiplayer.chatMessage,ci:multiplayer.chatMessageId};multiplayer.chatMessage&&(multiplayer.chatMessage=""),multiplayer.lastRequest=await geofs.ajax.post(geofs.multiplayerHost+"/update",a,multiplayer.updateCallback,multiplayer.errorCallback),window.ATCADDON.chat=[...ATCADDON.chat,...multiplayer.lastRequest.chatMessages],multiplayer.lastRequest.chatMessages.forEach(t=>{let a=document.getElementById("atc-box");var i=decodeURIComponent(t.msg).match(/(?<=\[)(?:1[1-3]\d\.\d{1,3})(?=\])/);t.acid==geofs.userRecord.id?a.insertAdjacentElement("afterbegin",e(`<div class="chat-msg-self" style="color: #06F;"><b>${decodeURIComponent(t.cs)}:</b> ${decodeURIComponent(t.msg).replace(/(?:\[1[1-3]\d\.\d{1,3}\])/g,"")}<br></div>`)):i&&i[0]==window.ATCADDON.frequency?a.insertAdjacentElement("afterbegin",e(`<div class="chat-msg-self" style="color: #F70;"><b>${decodeURIComponent(t.cs)}:</b> ${decodeURIComponent(t.msg).replace(/(?:\[1[1-3]\d\.\d{1,3}\])/g,"")}<br></div>`)):898455!=t.acid&&!1==document.querySelector("#atc-only").checked&&a.insertAdjacentElement("afterbegin",e(`<div class="chat-msg-other"><b>${decodeURIComponent(t.cs)}:</b> ${decodeURIComponent(t.msg).replace(/(?:\[1[1-3]\d\.\d{1,3}\])/g,"")}<br></div>`))})}async function a(){for(;;)await t(),await sleep(1e3)}function i(){geofs.map.toggleATCMode();let e=document.createElement("div"),t=document.createElement("form"),i=document.createElement("input"),s=document.createElement("input"),r=document.createElement("div");e.setAttribute("id","atc-box"),e.setAttribute("style",`
-
-            position: absolute;
-            top: 170px;
-            left: 10px;
-            z-index: 1000;
-            font-weight: normal;
-            overflow: hidden;
-            text-align: left;
-            color: #DDD;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            padding: 0px 0px;
-            padding-left: 5px;
-            line-height: 29px;
-            background-color: #0000007F;
-            border: 1px solid rgb(169, 187, 223);
-            width: 40%;
-            height: 75%;
-            box-shadow: 0px 5px 30px #666;
-
-        `),t.setAttribute("id","atc-form"),i.setAttribute("id","atc-input"),i.setAttribute("style",`
-
-            position: absolute;
-            top: 130px;
-            left: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            overflow: hidden;
-            text-align: left;
-            color: #DDD;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            padding: 0px 0px;
-            padding-left: 5px;
-            line-height: 29px;
-            background-color: #0000007F;
-            border: 1px solid rgb(169, 187, 223);
-            width: 40%;
-            height: 30px;
-            box-shadow: 0px 5px 30px #666;
-
-        `),i.setAttribute("placeholder","Send Message..."),s.setAttribute("id","atc-frequency"),s.setAttribute("style",`
-
-            position: absolute;
-            top: 90px;
-            left: 50px;
-            z-index: 1000;
-            font-weight: bold;
-            overflow: hidden;
-            text-align: left;
-            color: #DDD;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            padding: 0px 0px;
-            padding-left: 5px;
-            line-height: 29px;
-            background-color: #0000007F;
-            border: 1px solid rgb(169, 187, 223);
-            width: 15%;
-            height: 30px;
-            box-shadow: 0px 5px 30px #666;
-
-        `),s.setAttribute("placeholder","Frequency"),s.setAttribute("type","number"),s.setAttribute("min","118"),s.setAttribute("max","137"),s.setAttribute("step","0.001"),r.setAttribute("style",`
-
-            position: absolute;
-            top: 90px;
-            left: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            overflow: hidden;
-            text-align: left;
-            color: #DDD;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            padding: 0px 0px;
-            line-height: 29px;
-            background-color: #0000007F;
-            border: 1px solid rgb(169, 187, 223);
-            width: 30px;
-            height: 30px;
-            box-shadow: 0px 5px 30px #666;
-
-        `),r.innerHTML='<input id="atc-only" type="checkbox" style="width:75%;height:75%;position:relative;">',t.appendChild(i),document.body.appendChild(e),document.body.appendChild(t),document.body.appendChild(s),document.body.appendChild(r),t.addEventListener("submit",e=>{e.preventDefault();let t=document.getElementById("atc-input"),a=document.getElementById("atc-frequency");window.ATCADDON.frequency=a.value,window.ATCADDON.frequency&&/(?:1[1-3]\d\.\d{1,3})/.test(window.ATCADDON.frequency)?multiplayer.setChatMessage(t.value+` [${window.ATCADDON.frequency}]`):multiplayer.setChatMessage(t.value),t.value=""}),a()}window.ATCADDON={},window.ATCADDON.chat=[],i()}else if("/geofs.php"===window.location.pathname){let s=document.querySelector(".geofs-ui-top"),r=document.createElement("div");r.setAttribute("class","atcaddon-frequency"),r.setAttribute("style",`
-
-            opacity: 0.5;
-            margin-top: 5px;
-            white-space: nowrap;
-            display: flex;
-
-        `),r.innerHTML=`
-
-            <input id="Frequency" type="number" min="118" max="137" step="0.001" style="left: 10px; top: 0px; border: 1px solid #888;background-color: #000;box-shadow: 0px 0px 5px #000;cursor: pointer !important;width: 90px;height: 25px;border-radius: 15px;outline: none;line-height: 27px;white-space: nowrap; color: white; padding: 5px, 0px;" placeholder="Input Frequency">
-
-        `,s.appendChild(r);let n=document.createElement("style");n.innerHTML=`
-            .geofs-chat-message .label.atc {
-                color: rgb(255,128,0);
-                cursor: auto;
-            }
-        `,document.head.appendChild(n),(async()=>{await sleep(5e3),ui.chat.publish=function(e){var t=decodeURIComponent(e.msg),a=t.match(/(?<=\[)(?:1[1-3]\d\.\d{1,3})(?=\])/),i=a&&a[0]==`${document.querySelector("#Frequency").value}`;if(geofs.preferences.chat&&(i||!document.querySelector("#Frequency").value)){ui.chat.$container=ui.chat.$container||$(".geofs-chat-messages");var s="";i&&(s="atc"),t=t.replace(/(?:\[1[1-3]\d\.\d{1,3}\])/g,""),e.acid==geofs.userRecord.id&&(s="myself"),ui.chat.$container.prepend('<div class="geofs-chat-message '+e.cls+'"><b class="label '+s+'" data-player="'+e.uid+'" acid="'+e.acid+'" callsign="'+e.cs+'">'+e.cs+":</b> "+t+"</div>"),ui.chat.$container.find(".geofs-chat-message").each(function(e,t){$(t).css("opacity",(ui.chat.maxNumberMessages-e)/ui.chat.maxNumberMessages)}).eq(ui.chat.maxNumberMessages).remove()}},multiplayer.setChatMessage=function(e){let t=document.querySelector("#Frequency").value;t&&/(?:1[1-3]\d\.\d{1,3})/.test(t)?multiplayer.chatMessage=e+` [${t}]`:multiplayer.chatMessage=e}})()}
           })();
       };
       window.fpv = function() {
