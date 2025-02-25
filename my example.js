@@ -140,8 +140,10 @@
 		    Down: [Enter]
 		    Yaw right: [.]
 		    Yaw left: [,]
-		    Roll right: [->]
-		    Roll left: [<-]`,
+		    Roll right: [→]
+		    Roll left: [←]
+		    Tilt up: [↑]
+    		    Tilt downL: [↓]`,
 
                     'Streetlights': `Creates 3d streetlights`,
 
