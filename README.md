@@ -6,13 +6,11 @@ This creates an Addons item in the options panel, which drops down to allow you 
 ![image](https://github.com/user-attachments/assets/da122b15-1bf9-44ac-9264-9622cf767246)
 
 The userscript is an example setup that creates the addons above. You can add your own addons in the places that I've labeled accordingly.
-I've also included the version that I use. It includes 17 addons (some of which I modified slightly to allow it to better run alongside the others):
+I've also included the version that I use. It includes 16 addons (some of which I modified slightly to allow it to better run alongside the others):
 
 https://github.com/meatbroc/GeoFS-atc-airspace
 
 https://github.com/jtpotato/geofs-scripts/tree/main/Autoland%2B%2B
-
-https://github.com/ThePlaneGuy45/GeoFS-ATCAddon
 
 https://github.com/tylerbmusic/GeoFS-Flight-Path-Vector
 
