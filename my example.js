@@ -156,6 +156,7 @@
               const addonItem = document.createElement('ul');
               addonItem.className = 'no-hover geofs-list-collapsible-item geofs-hideForApp';
               addonItem.style.position = 'relative';
+	      addonItem.style.backgroundColor = 'rgba(255, 255, 255, 0.5)'
               addonItem.innerText = name;
   
               const descDropdownIcon = document.createElement('li');
