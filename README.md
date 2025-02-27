@@ -38,6 +38,4 @@ https://github.com/tylerbmusic/GeoFS-Streetlights
 
 https://github.com/tylerbmusic/GeoFS-Taxiway-Lights
 
-https://github.com/jtpotato/geofs-scripts/blob/main/scripts/GeoFS%20Tiller%20Fix.user.js
-
-*modifications include CSS changes to make all the ui bar elements coexist neatly, integrating the fuel leak failure with the fuel addon, allowing slew mode, streetlights, and taxiway lights to all run at the same time (for some reason you could only run one at a time) (WIP), and remapping the FPV toggle key to [Insert] to prevent overlapping with the slew mode keybinds
+*modifications include CSS changes to make all the ui bar elements coexist neatly, integrating the fuel leak failure with the fuel addon, allowing slew mode, streetlights, and taxiway lights to all run at the same time (for some reason you could only run one at a time) (WIP), adding a RUN ALL button (WIP), and remapping the FPV toggle key to [Insert] to prevent overlapping with the slew mode keybinds
