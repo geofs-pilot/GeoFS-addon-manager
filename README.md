@@ -40,4 +40,4 @@ https://github.com/tylerbmusic/GeoFS-Taxiway-Lights
 
 https://github.com/jtpotato/geofs-scripts/blob/main/scripts/GeoFS%20Tiller%20Fix.user.js
 
-*modifications include CSS changes to make all the ui bar elements coexist neatly, integrating the fuel leak failure with the fuel addon (WIP), allowing slew mode, streelights, and taxiway lights to all run at the same time (for some reason you could only run one at a time) (WIP)
+*modifications include CSS changes to make all the ui bar elements coexist neatly, integrating the fuel leak failure with the fuel addon (WIP), allowing slew mode, streetlights, and taxiway lights to all run at the same time (for some reason you could only run one at a time) (WIP)
