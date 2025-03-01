@@ -24,6 +24,6 @@ https://github.com/tylerbmusic/GeoFS-Taxiway-Lights
 ![image](https://github.com/user-attachments/assets/b14ba171-feb5-4a72-992e-78ea02138824) <br/>
 # Things I'm working on
  -allowing slew mode and taxiway lights to run at the same time (for some reason you could only run one at a time) <br/>
- -allowing exemptions from the RUN ALL button, for example so that if realism pack is running, there's no need to run liveryselector too (or I could just get rid of LS entirely for that purpose) <br/>
+ -allowing exemptions from the RUN ALL button, for example so that if realism pack is running, there's no need to run liveryselector seperately (or I could just get rid of LS entirely for that purpose) <br/>
  -placing the fuel, glideslope, baro minimums, and failures UI elements on a lower zIndex than the video playback UI bar to prevent this↓ from happening when playing the recorded flight <br/>
  ![image](https://github.com/user-attachments/assets/5d2de2d0-e274-40f7-b636-18948f5fbd44)
