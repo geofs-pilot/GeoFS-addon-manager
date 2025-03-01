@@ -1,7 +1,7 @@
 # GeoFS-addon-manager
 Inspired by https://github.com/tylerbmusic/GeoFS-Addon-Menu <br/>
 This creates an Addons item in the options panel, which drops down to allow you to run different addons. There is also a description section where you can put instructions, etc. <br/>
-![image](https://github.com/user-attachments/assets/da122b15-1bf9-44ac-9264-9622cf767246)
+![image](https://github.com/user-attachments/assets/da122b15-1bf9-44ac-9264-9622cf767246) <br/>
 The userscript is an example setup that creates the addons above. You can add your own addons in the places that I've labeled accordingly. <br/>
 I've also included the version that I use. It includes 15 addons (some of which I modified slightly to allow it to better run alongside the others*):
 
