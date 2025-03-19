@@ -428,7 +428,384 @@
       window.failures = function() {
           (function() {
               //PASTE IN CODE BELOW
-              class Failure{constructor(){this.aId=window.geofs.aircraft.instance.id,this.enabled=!1,this.failures=[],this.fails={landingGear:{front:!1,left:!1,right:!1},fuelLeak:!1,flightCtrl:{ailerons:!1,elevators:!1,rudder:!1},electrical:!1,structural:!1,hydraulic:{flaps:!1,brakes:!1,spoilers:!1},pitotStatic:!1,pressurization:!1,engines:[]};for(var e=0;e<window.geofs.aircraft.instance.engines.length;e++)this.fails.engines.push({i:!1});this.chances={landingGear:{front:0,left:0,right:0},fuelLeak:0,flightCtrl:{ailerons:0,elevators:0,rudder:0},electrical:0,structural:0,hydraulic:{flaps:0,brakes:0,spoilers:0},pitotStatic:0,pressurization:0,engines:[]};for(var t=0;t<window.geofs.aircraft.instance.engines.length;t++)this.chances.engines.push({v:0})}fail(e){for(var t=window.geofs.aircraft.instance.engines.length,i=0;i<t;i++)e=="engine"+i&&(alert("Engine "+(i+1)+" failed!"),window.geofs.aircraft.instance.engines[i].thrust=0,new window.geofs.fx.ParticleEmitter({off:0,anchor:window.geofs.aircraft.instance.engines[0].points.contrailAnchor||{worldPosition:window.geofs.aircraft.instance.engines[0].object3d.worldPosition},duration:1e10,rate:.03,life:1e4,easing:"easeOutQuart",startScale:.01,endScale:.2,randomizeStartScale:.01,randomizeEndScale:.15,startOpacity:1,endOpacity:.2,startRotation:"random",texture:"whitesmoke"}),setInterval(()=>{window.geofs.fx.setParticlesColor(new window.Cesium.Color(.1,.1,.1,1))},20));if(!e.includes("engine"))switch(e){case"fuelLeak":if(!this.fails.fuelLeak){alert("Fuel leak! 2 minutes of fuel remaining"),this.fails.fuelLeak=!0;let a,n=setInterval(()=>{if(void 0!==window.fuelBurnRate&&void 0!==window.initialFuel){console.log("Fuel addon detected, starting fuel leak!");let e=window.initialFuel/120*3600;a=setInterval(()=>{window.fuelBurnRate=e,console.log(`Fuel burn rate dynamically set to ${window.fuelBurnRate}`),!1===geofs.aircraft.instance.engine.on&&clearInterval(a)},100),clearInterval(n)}},1e3);setTimeout(()=>{void 0===window.fuelBurnRate?(console.log("Fuel addon not detected, shutting down engines manually!"),setInterval(()=>{console.log("Engine stopped due to fuel leak failure."),window.geofs.aircraft.instance.stopEngine()},1e3)):(console.log("Fuel addon was detected, not manually shutting engines."),clearInterval(a))},12e4)}break;case"gearFront":if(!this.fails.landingGear.front){alert("Nose gear failure"),this.fails.landingGear.front=!0;var l=2;for(i=0;i<window.geofs.aircraft.instance.suspensions.length;i++)(window.geofs.aircraft.instance.suspensions[i].name.includes("front")||window.geofs.aircraft.instance.suspensions[i].name.includes("nose")||window.geofs.aircraft.instance.suspensions[i].name.includes("tail"))&&(l=i);this.failures.push(setInterval(()=>{window.geofs.aircraft.instance.suspensions[l].collisionPoints[0][2]=30}),1e3)}break;case"gearLeft":if(!this.fails.landingGear.left){alert("Left gear failure"),this.fails.landingGear.left=!0;var s=0;for(i=0;i<window.geofs.aircraft.instance.suspensions.length;i++)(window.geofs.aircraft.instance.suspensions[i].name.includes("left")||window.geofs.aircraft.instance.suspensions[i].name.includes("l"))&&(s=i);this.failures.push(setInterval(()=>{window.geofs.aircraft.instance.suspensions[s].collisionPoints[0][2]=30}),1e3)}break;case"gearRight":if(alert("Right gear failure"),!this.fails.landingGear.right){this.fails.landingGear.right=!0;var r=1;for(i=0;i<window.geofs.aircraft.instance.suspensions.length;i++)(window.geofs.aircraft.instance.suspensions[i].name.includes("right")||window.geofs.aircraft.instance.suspensions[i].name.includes("r_g"))&&(r=i);this.failures.push(setInterval(()=>{window.geofs.aircraft.instance.suspensions[r].collisionPoints[0][2]=30}),1e3)}break;case"ailerons":alert("Flight control failure (ailerons)"),this.fails.flightCtrl.ailerons||(this.fails.flightCtrl.ailerons=!0,this.failures.push(setInterval(()=>{for(var e in window.geofs.aircraft.instance.airfoils)window.geofs.aircraft.instance.airfoils[e].name.toLowerCase().includes("aileron")&&(window.geofs.aircraft.instance.airfoils[e].object3d._scale=[0,0,0])}),1e3));break;case"elevators":alert("Flight control failure (elevators)"),this.fails.flightCtrl.elevators||(this.fails.flightCtrl.elevators=!0,this.failures.push(setInterval(()=>{for(var e in window.geofs.aircraft.instance.airfoils)window.geofs.aircraft.instance.airfoils[e].name.toLowerCase().includes("elevator")&&(window.geofs.aircraft.instance.airfoils[e].object3d._scale=[0,0,0])}),1e3));break;case"rudder":alert("Flight control failure (rudder)"),this.fails.flightCtrl.rudder||(this.fails.flightCtrl.rudder=!0,this.failures.push(setInterval(()=>{for(var e in window.geofs.aircraft.instance.airfoils)window.geofs.aircraft.instance.airfoils[e].name.toLowerCase().includes("rudder")&&(window.geofs.aircraft.instance.airfoils[e].object3d._scale=[0,0,0])}),1e3));break;case"electrical":this.fails.electrical||(alert("Electrical failure"),this.fails.electrical=!0,this.failures.push(setInterval(()=>{for(var e=1;e<=5;e++)window.geofs.aircraft.instance.cockpitSetup.parts[e].object3d._scale=[0,0,0];window.geofs.autopilot.turnOff(),window.instruments.hide()}),1e3));break;case"structural":this.fails.structural||(alert("Significant structural damage detected"),console.log("Boeing, am I right?"),this.fails.structural=!0,this.failures.push(setInterval(()=>{window.weather.definition.turbulences=3}),1e3));break;case"flaps":this.fails.hydraulic.flaps||(alert("Hydraulic failure (flaps)"),this.fails.hydraulic.flaps=!0,this.failures.push(setInterval(()=>{window.controls.flaps.target=Math.floor(.6822525475345469*(2*window.geofs.animation.values.flapsSteps)),window.controls.flaps.delta=20}),1e3));break;case"brakes":this.fails.hydraulic.brakes||(alert("Hydraulic failure (brakes)"),this.fails.hydraulic.brakes=!0,this.failures.push(setInterval(()=>{window.controls.brakes=0}),500));break;case"spoilers":this.fails.hydraulic.spoilers||(alert("Hydraulic failure (spoilers)"),this.fails.hydraulic.spoilers=!0,this.failures.push(setInterval(()=>{window.controls.airbrakes.target=0.2,window.controls.airbrakes.delta=20}),1e3));break;case"pressurization":this.fails.pressurization||(alert("Cabin depressurization! Get at or below 9,000 ft MSL!"),this.fails.pressurization=!0,this.failures.push(setInterval(()=>{window.geofs.animation.values.altitude>9e3?window.weather.definition.turbulences=(window.geofs.animation.values.altitude-9e3)/5200:window.weather.definition.turbulences=0}),1e3))}}tick(){if(this.enabled){for(var e in console.log("tick"),this.chances.landingGear)Math.random()<this.chances.landingGear[e]&&this.fail("gear"+(e[0].toUpperCase()+e.substr(1,e.length)));for(var t in this.chances)if("number"==typeof this.chances[t])Math.random()<this.chances[e]&&this.fail(t);else if("landingGear"!==t)for(var i in this.chances[t])Math.random()<this.chances[t][i]&&this.fail(i);setTimeout(()=>{this.tick()},6e4)}}reset(){for(var e in this.failures)clearInterval(this.failures[e]);this.enabled=!1}}function waitForEntities(){try{if(!1==window.geofs.cautiousWithTerrain){window.mainFailureFunction();return}}catch(e){console.log("Error in waitForEntities:",e)}setTimeout(()=>{waitForEntities()},1e3)}window.openFailuresMenu=function(){if(window.failuresMenu){if(window.failuresMenu.hidden=!window.failuresMenu.hidden,window.geofs.aircraft.instance.id!==window.aId)for(window.failure.reset(),window.failure=new Failure,e=`
+              // ==UserScript==
+// @name         GeoFS Failures
+// @version      0.3.2
+// @description  Adds the ability for systems to fail
+// @author       GGamerGGuy
+// @match        https://www.geo-fs.com/geofs.php?v=*
+// @match        https://*.geo-fs.com/geofs.php*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=geo-fs.com
+// @grant        none
+// ==/UserScript==
+class Failure {
+    constructor() {
+        this.aId = window.geofs.aircraft.instance.id; //aircraft ID
+        this.enabled = false; //Start disabled
+        this.failures = []; //Array with all failure intervals
+        this.fails = {
+            landingGear: {
+                front: false,
+                left: false,
+                right: false
+            },
+            fuelLeak: false,
+            flightCtrl: {
+                ailerons: false,
+                elevators: false,
+                rudder: false,
+            },
+            electrical: false,
+            structural: false,
+            hydraulic: {
+                flaps: false,
+                brakes: false,
+                spoilers: false
+            },
+            pitotStatic: false,
+            pressurization: false,
+            engines: []
+        } //End fails
+        for (var i = 0; i < window.geofs.aircraft.instance.engines.length; i++) {
+            this.fails.engines.push({i: false});
+        }
+        this.chances = { //Chances of a failure happening every minute, from 0 to 1
+            landingGear: {
+                front: 0,
+                left: 0,
+                right: 0
+            },
+            fuelLeak: 0,
+            flightCtrl: {
+                ailerons: 0,
+                elevators: 0,
+                rudder: 0
+            },
+            electrical: 0,
+            structural: 0,
+            hydraulic: {
+                flaps: 0,
+                brakes: 0,
+                spoilers: 0
+            },
+            pitotStatic: 0,
+            pressurization: 0,
+            engines: []
+        } //End chances
+        for (var v = 0; v < window.geofs.aircraft.instance.engines.length; v++) {
+            this.chances.engines.push({v: 0});
+        }
+    } //End constructor
+
+    fail(system) {
+        var ngin_l = window.geofs.aircraft.instance.engines.length; //N-Gin Length
+        //Engine (first because the number varies):
+        //Left:  window.geofs.aircraft.instance.definition.parts[79].thrust = 0;
+        //Right: window.geofs.aircraft.instance.definition.parts[82].thrust = 0;
+        for (var i = 0; i < ngin_l; i++) {
+            if (system == ("engine" + i)) {
+                alert("Engine " + (i+1) + " failed!");
+                window.geofs.aircraft.instance.engines[i].thrust = 0;
+                var v = new window.geofs.fx.ParticleEmitter({
+                    off: 0,
+                    anchor: window.geofs.aircraft.instance.engines[0].points.contrailAnchor || {worldPosition: window.geofs.aircraft.instance.engines[0].object3d.worldPosition},
+                    duration: 1E10,
+                    rate: .03,
+                    life: 1E4, //10 seconds
+                    easing: "easeOutQuart",
+                    startScale: .01,
+                    endScale: .2,
+                    randomizeStartScale: .01,
+                    randomizeEndScale: .15,
+                    startOpacity: 1,
+                    endOpacity: .2,
+                    startRotation: "random",
+                    texture: "whitesmoke"
+                });
+                var p = setInterval(() => {window.geofs.fx.setParticlesColor(new window.Cesium.Color(0.1,0.1,0.1,1));},20);
+            }
+        }
+
+
+
+if (!system.includes("engine")) {
+            switch (system) {
+                case "fuelLeak":
+                // Check if a fuel leak has already been triggered
+                if (!this.fails.fuelLeak) {
+                    alert("Fuel leak! 2 minutes of fuel remaining");
+                    this.fails.fuelLeak = true;
+
+                    let fuelLeakInterval, fuelBurnInterval;
+
+                    // Check for the presence of a fuel addon every second - not detecting fuel addon
+                    let fuelAddonCheck = setInterval(() => {
+                        if (window.fuelBurnRate !== undefined && window.initialFuel !== undefined) {
+                            console.log("Fuel addon detected, starting fuel leak!");
+
+                            // Calculate fuel leak rate: drain all fuel in 2 minutes (120 seconds)
+                            let fuelLeakRate = (window.initialFuel / 120) * 3600; // Convert from seconds to per hour
+
+                            // Set the fuel burn rate dynamically every 100ms
+                            fuelBurnInterval = setInterval(() => {
+                                window.fuelBurnRate = fuelLeakRate;
+                                console.log(`Fuel burn rate dynamically set to ${window.fuelBurnRate}`);
+
+                                // If the engine is off, stop the leak interval
+                                if (!geofs.aircraft.instance.engine.on) {
+                                    clearInterval(fuelBurnInterval);
+                                }
+                            }, 100);
+
+                            // Stop checking for the fuel addon since it was found
+                            clearInterval(fuelAddonCheck);
+                        }
+                    }, 1000);
+
+                    // After 2 minutes (120,000 ms), if the fuel addon wasn't detected, shut down the engines manually - working
+                    setTimeout(() => {
+                        if (window.fuelBurnRate === undefined) {
+                            console.log("Fuel addon not detected, shutting down engines manually!");
+
+                            // Stop engines manually every 100ms
+                            setInterval(() => {
+                                console.log("Engine stopped due to fuel leak failure.");
+                                geofs.aircraft.instance.stopEngine();
+                            }, 100);
+                        } else {
+                            console.log("Fuel addon was detected, not manually shutting engines.");
+                            clearInterval(fuelBurnInterval);
+                        }
+                    }, 10000);
+                }
+    break;
+
+            
+
+                    
+                    //Landing gear:
+                    //Front landing gear failure:
+                case "gearFront":
+                    if (!this.fails.landingGear.front) {
+                        alert("Nose gear failure");
+                        this.fails.landingGear.front = true;
+                        var fG = 2;
+                        for (i = 0; i < window.geofs.aircraft.instance.suspensions.length; i++) {
+                            if (window.geofs.aircraft.instance.suspensions[i].name.includes("front") || window.geofs.aircraft.instance.suspensions[i].name.includes("nose") || window.geofs.aircraft.instance.suspensions[i].name.includes("tail")) {
+                                fG = i;
+                            }
+                        }
+                        this.failures.push(setInterval(() => {
+                            window.geofs.aircraft.instance.suspensions[fG].collisionPoints[0][2] = 30;
+                        }),1000);
+                    }
+                    break;
+                    //Left landing gear failure:
+                case "gearLeft":
+                    if (!this.fails.landingGear.left) {
+                        alert("Left gear failure");
+                        this.fails.landingGear.left = true;
+                        var lG = 0;
+                        for (i = 0; i < window.geofs.aircraft.instance.suspensions.length; i++) {
+                            if (window.geofs.aircraft.instance.suspensions[i].name.includes("left") || window.geofs.aircraft.instance.suspensions[i].name.includes("l")) {
+                                lG = i;
+                            }
+                        }
+                        this.failures.push(setInterval(() => {
+                            window.geofs.aircraft.instance.suspensions[lG].collisionPoints[0][2] = 30;
+                        }),1000);
+                    }
+                    break;
+                    //Right landing gear failure:
+                case "gearRight":
+                    alert("Right gear failure");
+                    if (!this.fails.landingGear.right) {
+                        this.fails.landingGear.right = true;
+                        var rG = 1;
+                        for (i = 0; i < window.geofs.aircraft.instance.suspensions.length; i++) {
+                            if (window.geofs.aircraft.instance.suspensions[i].name.includes("right") || window.geofs.aircraft.instance.suspensions[i].name.includes("r_g")) {
+                                rG = i;
+                            }
+                        }
+                        this.failures.push(setInterval(() => {
+                            window.geofs.aircraft.instance.suspensions[rG].collisionPoints[0][2] = 30;
+                        }),1000);
+                    }
+                    break;
+
+                    //Flight control:
+                    //Left aileron: window.geofs.aircraft.instance.definition.parts[6].object3d._scale = [0,0,0];
+                    //Right aileron: window.geofs.aircraft.instance.definition.parts[29].object3d._scale = [0,0,0];
+                case "ailerons":
+                    alert("Flight control failure (ailerons)");
+                    if (!this.fails.flightCtrl.ailerons) {
+                        this.fails.flightCtrl.ailerons = true;
+                        this.failures.push(setInterval(() => {
+                            for (var t in window.geofs.aircraft.instance.airfoils) {
+                                if (window.geofs.aircraft.instance.airfoils[t].name.toLowerCase().includes("aileron")) {
+                                    window.geofs.aircraft.instance.airfoils[t].object3d._scale = [0,0,0];
+                                }
+                            }
+                        }),1000);
+                    }
+                    break;
+                    //Left elevator: window.geofs.aircraft.instance.definition.parts[51].object3d._scale = [0,0,0];
+                    //Right elevator: window.geofs.aircraft.instance.definition.parts[52].object3d._scale = [0,0,0];
+                case "elevators":
+                    alert("Flight control failure (elevators)");
+                    if (!this.fails.flightCtrl.elevators) {
+                        this.fails.flightCtrl.elevators = true;
+                        this.failures.push(setInterval(() => {
+                            for (var t in window.geofs.aircraft.instance.airfoils) {
+                                if (window.geofs.aircraft.instance.airfoils[t].name.toLowerCase().includes("elevator")) {
+                                    window.geofs.aircraft.instance.airfoils[t].object3d._scale = [0,0,0];
+                                }
+                            }
+                        }),1000);
+                    }
+                    break;
+                case "rudder":
+                    alert("Flight control failure (rudder)");
+                    if (!this.fails.flightCtrl.rudder) {
+                        this.fails.flightCtrl.rudder = true;
+                        this.failures.push(setInterval(() => {
+                            for (var t in window.geofs.aircraft.instance.airfoils) {
+                                if (window.geofs.aircraft.instance.airfoils[t].name.toLowerCase().includes("rudder")) {
+                                    window.geofs.aircraft.instance.airfoils[t].object3d._scale = [0,0,0];
+                                }
+                            }
+                        }),1000);
+                    }
+                    break;
+
+                    //Electrical:
+                    //for (var i = 1; i <= 5; i++) {
+                    //window.geofs.aircraft.instance.cockpitSetup.parts[i].object3d._scale = [0,0,0];
+                    //}
+                    //instruments.hide();
+                case "electrical":
+                    if (!this.fails.electrical) {
+                        alert("Electrical failure");
+                        this.fails.electrical = true;
+                        this.failures.push(setInterval(() => {
+                            for (var i = 1; i <= 5; i++) {
+                                window.geofs.aircraft.instance.cockpitSetup.parts[i].object3d._scale = [0,0,0];
+                            }
+                            window.geofs.autopilot.turnOff();
+                            window.instruments.hide();
+                        }),1000);
+                    }
+                    break;
+
+                case "structural":
+                    if (!this.fails.structural) {
+                        alert("Significant structural damage detected");
+                        console.log("Boeing, am I right?");
+                        this.fails.structural = true;
+                        this.failures.push(setInterval(() => {
+                            window.weather.definition.turbulences = 3;
+                        }),1000);
+                    }
+                    break;
+
+                    //Hydraulic:
+                    //Flaps: controls.flaps.target = Math.floor(Math.random()*(window.geofs.animation.values.flapsSteps*2));  controls.flaps.delta = 20;
+                case "flaps":
+                    if (!this.fails.hydraulic.flaps) {
+                        alert("Hydraulic failure (flaps)");
+                        this.fails.hydraulic.flaps = true;
+                        this.failures.push(setInterval(() => {
+                            window.controls.flaps.target = Math.floor(0.6822525475345469*(window.geofs.animation.values.flapsSteps*2)); //0.6822525475345469 is a random number, which keeps things consistent
+                            window.controls.flaps.delta = 20;
+                        }),1000);
+                    }
+                    break;
+                    //Brakes: controls.brakes = 0;
+                case "brakes":
+                    if (!this.fails.hydraulic.brakes) {
+                        alert("Hydraulic failure (brakes)");
+                        this.fails.hydraulic.brakes = true;
+                        this.failures.push(setInterval(() => {
+                            window.controls.brakes = 0;
+                        }),500);
+                    }
+                    break;
+                    //Spoilers: controls.airbrakes.target = Math.round(Math.random()*20)/10;  controls.airbrakes.delta = 20;
+                case "spoilers":
+                    if (!this.fails.hydraulic.spoilers) {
+                        alert("Hydraulic failure (spoilers)");
+                        this.fails.hydraulic.spoilers = true;
+                        this.failures.push(setInterval(() => {
+                            window.controls.airbrakes.target = 0.2;
+                            window.controls.airbrakes.delta = 20;
+                        }),1000);
+                    }
+                    break;
+
+                case "pressurization":
+                    if (!this.fails.pressurization) {
+                        alert("Cabin depressurization! Get at or below 9,000 ft MSL!");
+                        this.fails.pressurization = true;
+                        this.failures.push(setInterval(() => {
+                            if (window.geofs.animation.values.altitude > 9000) {
+                                window.weather.definition.turbulences = (window.geofs.animation.values.altitude - 9000) / 5200; //Dynamically adjust turbulence based on altitude
+                            } else {
+                                window.weather.definition.turbulences = 0;
+                            }
+                        }),1000);
+                    }
+                    break;
+            } //End system switch
+        } //End not system.includes engine if statement
+    } //End fail method
+    tick() {
+        if (this.enabled) {
+            console.log("tick");
+            for (var i in this.chances.landingGear) {
+                if (Math.random() < this.chances.landingGear[i]) {
+                    this.fail("gear" + (i[0].toUpperCase() + i.substr(1,i.length)));
+                } //End if
+            } //End for
+            for (var q in this.chances) {
+                if (typeof this.chances[q] == "number") {
+                    if (Math.random() < this.chances[i]) {
+                        this.fail(q);
+                    }
+                } else if (q !== "landingGear") {
+                    for (var j in this.chances[q]) {
+                        if (Math.random() < this.chances[q][j]) {
+                            this.fail(j);
+                        } //End if
+                    } //End for
+                } //End else if
+            } //End for
+            setTimeout(() => {this.tick();}, 60000);
+        } //End if enabled statement
+    } //End tick method
+    reset() {
+        for (var i in this.failures) {
+            clearInterval(this.failures[i]);
+        }
+        //this.failures = [];
+        this.enabled = false;
+        //window.geofs.resetFlight();
+    }
+} //End failure class
+window.openFailuresMenu = function() {
+    if (!window.failuresMenu) {
+        window.failure = new Failure();
+        window.failuresMenu = document.createElement("div");
+        window.failuresMenu.style.position = "fixed";
+        window.failuresMenu.style.width = "640px";
+        window.failuresMenu.style.height = "480px";
+        window.failuresMenu.style.background = "white";
+        window.failuresMenu.style.display = "block";
+        window.failuresMenu.style.overflow = "scroll";
+        window.failuresMenu.style.zIndex = "10000";
+        window.failuresMenu.id = "failMenu";
+        window.failuresMenu.className = "geofs-ui-left";
+        document.body.appendChild(window.failuresMenu);
+        var htmlContent = `
         <div style="position: fixed; width: 640px; height: 10px; background: lightgray; cursor: move;" id="dragPart"></div>
         <p style="cursor: pointer;right: 0px;position: absolute;background: gray;height: fit-content;" onclick="window.failuresMenu.hidden=true;">X</p>
     <p>Note: Some failures may require a manual refresh of the page.</p>
@@ -605,20 +982,50 @@
 ">
         <button onclick="failure.fail('pressurization')">FAIL</button>
         <h1>Engines</h1>
-        `,t=0;t<window.geofs.aircraft.instance.engines.length;t++)e+=`
-            <h2>Engine ${t+1}</h2>
+        `;
+        for (var i = 0; i < window.geofs.aircraft.instance.engines.length; i++) {
+            htmlContent += `
+            <h2>Engine ${i+1}</h2>
     <span style="
     font-size: large;
     vertical-align: top;
 ">Chance per minute: </span>
-        <input type="range" min="0" max="1" step="0.01" id="slideEngine${t}" onchange="document.getElementById('inputEngine${t}').value=document.getElementById('slideEngine${t}').valueAsNumber; window.failure.chances.engines[i] = document.getElementById('slideEngine${t}').valueAsNumber"; draggable="false" style="
+        <input type="range" min="0" max="1" step="0.01" id="slideEngine${i}" onchange="document.getElementById('inputEngine${i}').value=document.getElementById('slideEngine${i}').valueAsNumber; window.failure.chances.engines[i] = document.getElementById('slideEngine${i}').valueAsNumber"; draggable="false" style="
     vertical-align: bottom;
 ">
-        <input disabled="true;" id="inputEngine${t}" style="
+        <input disabled="true;" id="inputEngine${i}" style="
     width: 40px;
 ">
-        <button onclick="failure.fail('engine${t}')">FAIL</button>
-            `,window.failuresMenu.innerHTML=e}else{window.failure=new Failure,window.failuresMenu=document.createElement("div"),window.failuresMenu.style.position="fixed",window.failuresMenu.style.width="640px",window.failuresMenu.style.height="480px",window.failuresMenu.style.background="white",window.failuresMenu.style.display="block",window.failuresMenu.style.overflow="scroll",window.failuresMenu.style.zIndex="10000",window.failuresMenu.id="failMenu",window.failuresMenu.className="geofs-ui-left",document.body.appendChild(window.failuresMenu);for(var e=`
+        <button onclick="failure.fail('engine${i}')">FAIL</button>
+            `;
+            window.failuresMenu.innerHTML = htmlContent;
+            const draggableDiv = document.getElementById('failMenu');
+            const dragPart = document.getElementById('dragPart');
+
+            dragPart.addEventListener('mousedown', function(e) {
+                let offsetX = e.clientX - draggableDiv.getBoundingClientRect().left;
+                let offsetY = e.clientY - draggableDiv.getBoundingClientRect().top;
+
+                function mouseMoveHandler(e) {
+                    draggableDiv.style.left = `${e.clientX - offsetX}px`;
+                    draggableDiv.style.top = `${e.clientY - offsetY}px`;
+                }
+
+                function mouseUpHandler() {
+                    document.removeEventListener('mousemove', mouseMoveHandler);
+                    document.removeEventListener('mouseup', mouseUpHandler);
+                }
+
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+            });
+        }
+    } else {
+        window.failuresMenu.hidden = !window.failuresMenu.hidden;
+        if (window.geofs.aircraft.instance.id !== window.aId) {
+            window.failure.reset();
+            window.failure = new Failure();
+            htmlContent = `
         <div style="position: fixed; width: 640px; height: 10px; background: lightgray; cursor: move;" id="dragPart"></div>
         <p style="cursor: pointer;right: 0px;position: absolute;background: gray;height: fit-content;" onclick="window.failuresMenu.hidden=true;">X</p>
     <p>Note: Some failures may require a manual refresh of the page.</p>
@@ -795,27 +1202,200 @@
 ">
         <button onclick="failure.fail('pressurization')">FAIL</button>
         <h1>Engines</h1>
-        `,t=0;t<window.geofs.aircraft.instance.engines.length;t++){e+=`
-            <h2>Engine ${t+1}</h2>
+        `;
+            for (i = 0; i < window.geofs.aircraft.instance.engines.length; i++) {
+                htmlContent += `
+            <h2>Engine ${i+1}</h2>
     <span style="
     font-size: large;
     vertical-align: top;
 ">Chance per minute: </span>
-        <input type="range" min="0" max="1" step="0.01" id="slideEngine${t}" onchange="document.getElementById('inputEngine${t}').value=document.getElementById('slideEngine${t}').valueAsNumber; window.failure.chances.engines[i] = document.getElementById('slideEngine${t}').valueAsNumber"; draggable="false" style="
+        <input type="range" min="0" max="1" step="0.01" id="slideEngine${i}" onchange="document.getElementById('inputEngine${i}').value=document.getElementById('slideEngine${i}').valueAsNumber; window.failure.chances.engines[i] = document.getElementById('slideEngine${i}').valueAsNumber"; draggable="false" style="
     vertical-align: bottom;
 ">
-        <input disabled="true;" id="inputEngine${t}" style="
+        <input disabled="true;" id="inputEngine${i}" style="
     width: 40px;
 ">
-        <button onclick="failure.fail('engine${t}')">FAIL</button>
-            `,window.failuresMenu.innerHTML=e;let i=document.getElementById("failMenu"),a=document.getElementById("dragPart");a.addEventListener("mousedown",function(e){let t=e.clientX-i.getBoundingClientRect().left,a=e.clientY-i.getBoundingClientRect().top;function n(e){i.style.left=`${e.clientX-t}px`,i.style.top=`${e.clientY-a}px`}function l(){document.removeEventListener("mousemove",n),document.removeEventListener("mouseup",l)}document.addEventListener("mousemove",n),document.addEventListener("mouseup",l)})}}},window.mainFailureFunction=function(){"use strict";window.failBtn=document.createElement("div"),window.failBtn.style.position="fixed",window.failBtn.style.right="60px",window.failBtn.style.height="36px",window.failBtn.style.bottom="0px",window.failBtn.style.border="transparent",window.failBtn.style.background="rgb(255,0,0)",window.failBtn.style.color="white",window.failBtn.style.fontWeight="600",window.failBtn.style.fontSize="20px",window.failBtn.style.cursor="pointer",window.failBtn.style.zIndex="10000",document.body.appendChild(window.failBtn),window.failBtn.innerHTML='<button style="position: inherit; right: inherit; height: inherit; top: inherit; border: inherit; background: inherit; color: inherit; font-weight: inherit; fontSize: inherit; cursor: inherit;" onclick="window.openFailuresMenu()">FLRS</button>',console.log("Failures loaded.")},waitForEntities();
-          })();
+        <button onclick="failure.fail('engine${i}')">FAIL</button>
+            `;
+                window.failuresMenu.innerHTML = htmlContent;
+            }
+        }
+    }
+}
+window.mainFailureFunction = function() {
+    'use strict';
+    window.failBtn = document.createElement('div');
+window.failBtn.style.position="fixed",window.failBtn.style.right="60px",window.failBtn.style.height="36px",window.failBtn.style.bottom="0px",window.failBtn.style.border="transparent",window.failBtn.style.background="rgb(255,0,0)",window.failBtn.style.color="white",window.failBtn.style.fontWeight="600",window.failBtn.style.fontSize="20px",window.failBtn.style.cursor="pointer",window.failBtn.style.zIndex="10000",document.body.appendChild(window.failBtn),window.failBtn.innerHTML='<button style="position: inherit; right: inherit; height: inherit; top: inherit; border: inherit; background: inherit; color: inherit; font-weight: inherit; fontSize: inherit; cursor: inherit;" onclick="window.openFailuresMenu()">FLRS</button>';
+    /*
+    Some failures include:
+     - Landing gear (nearly half of all aircraft-related failures) //works
+     - Fuel leak (timer, then window.geofs.aircraft.instance.stopEngine()) //works
+     - Flight control //works
+     - Electrical //
+     - Structural (weather.definition.turbulences = 5) //Y
+     - Hydraulic (flaps, brakes, spoilers) //Y
+     //- Pitot-Static (airspeed, altitude, vertical speed) (skipping this one for now too)
+     - Cabin pressurization (weather.definition.turbulences = 5 when above 9,000 ft) //Y
+     - Engine failure (from fire, bird strikes, or bad boeing build quality) //Y
+     Discord user Singapore (singapore7216) requests a way to set the likelihood for a system to fail
+     */
+    console.log("Failures loaded.");
+};
+function waitForEntities() {
+    try {
+        if (window.geofs.cautiousWithTerrain == false) {
+            // Entities are already defined, no need to wait
+            window.mainFailureFunction();
+            return;
+        }
+    } catch (error) {
+        // Handle any errors (e.g., log them)
+        console.log('Error in waitForEntities:', error);
+    }
+    // Retry after 1000 milliseconds
+    setTimeout(() => {waitForEntities();}, 1000);
+}
+waitForEntities();
+
+
+
+	  })();
       };
        window.fuel = function() {
           (function() {
               //PASTE IN CODE BELOW
-             function runFuelSystem(){var e,t,n;let r,l,i=(l=geofs.aircraft.instance.definition.mass,window.initialFuel=.75*l,{fuel:initialFuel,initialFuel}),{fuelBar:a,fuelBarContainer:o}=function e(){let t=document.createElement("div");t.style.position="absolute",t.style.bottom="8px",t.style.right="210px",t.style.width="75px",t.style.height="17px",t.style.border="1px solid black",t.style.borderRadius="5px",t.style.backgroundColor="black",t.style.zIndex="1000";let n=document.createElement("div");return n.style.height="100%",n.style.width="100%",n.style.backgroundColor="green",n.style.borderRadius="5px",t.appendChild(n),document.querySelector(".geofs-ui-bottom").appendChild(t),{fuelBar:n,fuelBarContainer:t}}(),s=function e(t){let n=document.createElement("button");return n.textContent="Refuel",n.style.position="absolute",n.style.bottom="5px",n.style.right="295px",n.style.padding="4px 20px",n.style.fontSize="14px",n.style.backgroundColor="yellow",n.style.border="1px solid black",n.style.borderRadius="5px",n.style.zIndex="1000",document.querySelector(".geofs-ui-bottom").appendChild(n),n.addEventListener("click",()=>{t.fuel=t.initialFuel,console.log("Plane refueled.")}),n}(i);e=i,t=a,n=s,r=setInterval(()=>{if(geofs.pause)return;let r=geofs.aircraft.instance.engines.reduce((e,t)=>e+(t.thrust||0),0),l=geofs.aircraft.instance.engines[0]?.afterBurnerThrust!==void 0,i=l&&Math.abs(geofs.animation.values.smoothThrottle)>.9,a=l?geofs.aircraft.instance.engines.reduce((e,t)=>e+(t.afterBurnerThrust||0),0):0,o=i?a:Math.abs(geofs.animation.values.smoothThrottle)*r,s=i?a/140:r/140,u;u="number"==typeof window.fuelBurnRate&&0!==window.fuelBurnRate?window.fuelBurnRate:geofs.aircraft.instance.engine.on?s+o/r*(3*s-s):0,e.fuel-=u*(1/3600),e.fuel<0&&(e.fuel=0);let d=e.fuel/e.initialFuel*100;t.style.width=`${d}%`,t.style.backgroundColor=d>15?"green":d>7?"orange":"red",0===e.fuel&&(window.fuelBurnRate=0,setInterval(()=>{0===e.fuel&&(controls.throttle=0,geofs.aircraft.instance.stopEngine())},10),console.log("Fuel depleted! Engines have been turned off."));let c=geofs.aircraft.instance.groundSpeed,$=geofs.aircraft.instance.groundContact,f=geofs.aircraft.instance.engine.on;n.style.display=c<1&&$&&!f?"block":"none",console.log(`Fuel Burn Rate per Hour: ${u.toFixed(6)}`),console.log(`Fuel Burned This Second: ${(u/3600).toFixed(6)}`),console.log(`Fuel Remaining: ${e.fuel.toFixed(2)}`)},1e3);let u=geofs.aircraft.instance.aircraftRecord.id;setInterval(()=>{geofs.aircraft.instance.aircraftRecord.id!==u&&(o.remove(),s.remove(),u=geofs.aircraft.instance.aircraftRecord.id,clearInterval(r),runFuelSystem())},1e3)}runFuelSystem();
-          })();
+//GeoFS Fuel: Attempts to simulate fuel consumption somewhat realistically
+//Calculates fuel capacity based on aircraft mass
+//Calculates burn rates based on RPM
+//Recalculates when switching aircraft
+//Accounts for afterburner use
+//Shuts off engines when fuel depleted
+//Must be on the ground, groundspeed 0, and engines off to refuel
+//Fine-tune endurance and burnrates on lines 57 and 71 - the higher the values, the longer the endurance (for line 82, change both of the 140's)
+
+function runFuelSystem() {
+    function createFuelBar() {
+        const fuelBarContainer = document.createElement("div");
+        fuelBarContainer.style.position = "absolute";
+        fuelBarContainer.style.bottom = "8px";
+        fuelBarContainer.style.right = "210px";
+        fuelBarContainer.style.width = "75px";
+        fuelBarContainer.style.height = "17px";
+        fuelBarContainer.style.border = "1px solid black";
+        fuelBarContainer.style.borderRadius = "5px";
+        fuelBarContainer.style.backgroundColor = "black";
+        fuelBarContainer.style.zIndex = "1000";
+
+        const fuelBar = document.createElement("div");
+        fuelBar.style.height = "100%";
+        fuelBar.style.width = "100%";
+        fuelBar.style.backgroundColor = "green";
+        fuelBar.style.borderRadius = "5px";
+
+        fuelBarContainer.appendChild(fuelBar);
+        document.querySelector(".geofs-ui-bottom").appendChild(fuelBarContainer);
+        return { fuelBar, fuelBarContainer };
+    }
+
+    function createRefuelButton(fuelState) {
+        const refuelButton = document.createElement("button");
+        refuelButton.textContent = "Refuel";
+        refuelButton.style.position = "absolute";
+        refuelButton.style.bottom = "5px";
+        refuelButton.style.right = "295px";
+        refuelButton.style.padding = "4px 20px";
+        refuelButton.style.fontSize = "14px";
+        refuelButton.style.backgroundColor = "yellow";
+        refuelButton.style.border = "1px solid black";
+        refuelButton.style.borderRadius = "5px";
+        refuelButton.style.zIndex = "1000";
+        document.querySelector(".geofs-ui-bottom").appendChild(refuelButton);
+        
+        refuelButton.addEventListener("click", () => {
+            fuelState.fuel = fuelState.initialFuel;
+            console.log("Plane refueled.");
+        });
+        return refuelButton;
+    }
+
+    function initializeFuelSystem() {
+        let mass = geofs.aircraft.instance.definition.mass;
+        window.initialFuel = mass * 0.75;
+        return { fuel: initialFuel, initialFuel };
+    }
+
+    let fuelUpdateInterval;
+    function updateFuelSystem(fuelState, fuelBar, refuelButton) {
+        fuelUpdateInterval = setInterval(() => {
+            if (geofs.pause) return;
+            const maxThrust = geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.thrust || 0), 0);
+            const hasAfterburners = geofs.aircraft.instance.engines[0]?.afterBurnerThrust !== undefined;
+            const usingAfterburners = hasAfterburners && Math.abs(geofs.animation.values.smoothThrottle) > 0.9;
+            const totalAfterBurnerThrust = hasAfterburners ? geofs.aircraft.instance.engines.reduce((sum, engine) => sum + (engine.afterBurnerThrust || 0), 0) : 0;
+            const currentThrust = usingAfterburners ? totalAfterBurnerThrust : Math.abs(geofs.animation.values.smoothThrottle) * maxThrust;
+            const throttle = currentThrust / maxThrust;
+            const idleBurnRate = usingAfterburners ? totalAfterBurnerThrust / 140 : maxThrust / 140;
+            const fullThrottleBurnRate = idleBurnRate * 3;
+//let fuelBurnRate;
+            if (typeof window.fuelBurnRate === "number" && window.fuelBurnRate !== 0) {
+    fuelBurnRate = window.fuelBurnRate; // Use the failure script's fuel leak rate
+} else {
+    fuelBurnRate = geofs.aircraft.instance.engine.on ? idleBurnRate + throttle * (fullThrottleBurnRate - idleBurnRate) : 0;
+}
+
+
+            const timeElapsed = 1 / 3600;
+            fuelState.fuel -= fuelBurnRate * timeElapsed;
+            if (fuelState.fuel < 0) fuelState.fuel = 0;
+
+            const fuelPercentage = (fuelState.fuel / fuelState.initialFuel) * 100;
+            fuelBar.style.width = `${fuelPercentage}%`;
+            fuelBar.style.backgroundColor = fuelPercentage > 15 ? "green" : fuelPercentage > 7 ? "orange" : "red";
+
+         if (fuelState.fuel === 0) {
+    window.fuelBurnRate = 0; // Reset fuel burn rate when fuel is empty
+    setInterval(() => {
+        if (fuelState.fuel === 0) {
+            controls.throttle = 0;
+            geofs.aircraft.instance.stopEngine();
+        }
+    }, 10);
+    console.log("Fuel depleted! Engines have been turned off.");
+}
+
+
+
+            console.log(`Fuel Burn Rate per Hour: ${fuelBurnRate.toFixed(6)}`);
+            console.log(`Fuel Burned This Second: ${(fuelBurnRate / 3600).toFixed(6)}`);
+            console.log(`Fuel Remaining: ${fuelState.fuel.toFixed(2)}`)
+        }, 1000);
+    }
+
+    const fuelState = initializeFuelSystem();
+    const { fuelBar, fuelBarContainer } = createFuelBar();
+    const refuelButton = createRefuelButton(fuelState);
+    updateFuelSystem(fuelState, fuelBar, refuelButton);
+    let lastAircraftId = geofs.aircraft.instance.aircraftRecord.id;
+    setInterval(() => {
+        if (geofs.aircraft.instance.aircraftRecord.id !== lastAircraftId) {
+            fuelBarContainer.remove();
+            refuelButton.remove();
+            lastAircraftId = geofs.aircraft.instance.aircraftRecord.id;
+            clearInterval(fuelUpdateInterval);
+            runFuelSystem();
+        }
+    }, 1000);
+    setInterval(() => {
+    	const groundSpeed = geofs.aircraft.instance.groundSpeed;
+const groundContact = geofs.aircraft.instance.groundContact;
+const engineOn = geofs.aircraft.instance.engine.on;
+refuelButton.style.display = (groundSpeed < 1 && groundContact && !engineOn) ? "block" : "none";
+    }, 100);
+}
+
+runFuelSystem();
+	  })();
       };
        window.gpws = function() {
           (function() {
