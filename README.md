@@ -1,4 +1,5 @@
-***Note: This script is no longer being updated, but it still has a few bugs. The newest version can be found here: https://github.com/geofs-pilot/GeoFS-All-in-one-Addon/tree/main <br/>
+***Note: This script is no longer being updated, but it still has a few bugs. The newest version can be found here: <br/> 
+https://github.com/geofs-pilot/GeoFS-All-in-one-Addon/tree/main <br/>
 # GeoFS-addon-manager
 Inspired by https://github.com/tylerbmusic/GeoFS-Addon-Menu <br/>
 This creates an Addons item in the options panel, which drops down to allow you to run different addons. There is also a description section where you can put instructions, etc. <br/>
